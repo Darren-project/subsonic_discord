@@ -1,0 +1,1 @@
+cd ../external && wget "https://github.com/ungoogled-software/ungoogled-chromium-portablelinux/releases/download/130.0.6723.58-1/ungoogled-chromium_130.0.6723.58-1_linux.tar.xz" && tar -xvf ungoogled-chromium_130.0.6723.58-1_linux.tar.xz && rm ungoogled-chromium_130.0.6723.58-1_linux.tar.xz

@@ -109,6 +109,8 @@ if __name__ == "__main__":
     os.system("cd entrypoint/ && python3 emergkill.py")
   elif argument == "auth":
     os.system("cd entrypoint && python3 auth.py")
+  elif argument == "chrome_download":
+    os.system("cd bin && bash chrome_download.sh")
   else:
     print("Invalid Argument")
     sys.exit(1)
