@@ -1,1 +1,4 @@
 config/shared.py
+config/plex_token.json
+external/arrpc/node_modules
+external/ungoogled-chromium_130.0.6723.58-1_linux

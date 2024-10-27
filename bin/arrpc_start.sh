@@ -1,1 +1,1 @@
-cd ../external/arrpc && node src --no-process-scanning 
+cd ../external/arrpc && npm i && node src --no-process-scanning 
