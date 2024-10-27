@@ -25,6 +25,8 @@ url = "https://app.plex.tv/auth#?clientID=" + shared.client_id + "&code=" + code
 
 print(url)
 
+input("enter after you coppied the link")
+
 while True:
 	headers = {
 	    'accept': 'application/json',
@@ -35,9 +37,11 @@ while True:
 
 	response = requests.get('https://plex.tv/api/v2/pins/' + pin_id, headers=headers, data=data)
 	json = response.json()
+	print(json)
 	if json.get("authToken"):
 		print("Saving Token")
 		f = open("../config/plex_token.json", "w")
 		f.write('{"plex_token": "' + json.get("authToken") + '"}')
 		f.close()
 		exit()
+	time.sleep(5)
