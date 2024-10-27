@@ -1,0 +1,6 @@
+client_id = "random_generated_uuid"
+product = "plex_app_namr"
+dtoken = "discord_user_token"
+cid = "plex_server_id"
+socks = "residential_proxy"
+d_app_cid = "discord_app_cid"
