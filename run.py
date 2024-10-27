@@ -53,6 +53,7 @@ def terminate_processes():
 def signal_handler(sig, frame):
     """Handle termination signals (SIGINT/SIGTERM) to stop daemons."""
     terminate_processes()
+    time.sleep(4)
     os.system("rm temp/pids.txt")
     sys.exit(0)
 if __name__ == "__main__":
