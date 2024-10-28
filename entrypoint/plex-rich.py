@@ -51,6 +51,8 @@ while True:  # The presence will stay on as long as the program is running
       else:
        img = url + music[2] + "?X-Plex-Token=" + data["plex_token"]
 #       print(img)
+       if music[0] == "":
+        raise "2"
        RPC.update(
           large_image=img,
           large_text=music[0],
@@ -66,7 +68,10 @@ while True:  # The presence will stay on as long as the program is running
     except:
 #       pass
        if tn < 6:
+        if not music[6] in ["Windows", "Mac", "Linux"]:
          tn = tn + 1
+        else:
+         tn = 6
        elif npc:
           pass
        else:
