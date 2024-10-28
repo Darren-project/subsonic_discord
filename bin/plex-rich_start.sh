@@ -1,1 +1,1 @@
-cd ../entrypoint && python3 plex-rich.py
+cd ../entrypoint && python3 plex-rich-watchdog.py

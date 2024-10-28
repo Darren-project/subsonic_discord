@@ -7,6 +7,7 @@ import random
 from config import shared
 import sys
 import os
+import requests
 
 last = {}
 tn = 0
@@ -20,24 +21,6 @@ log = logging.getLogger(__name__)
 log.addHandler(handler)
 def print(a):
     log.info(a)
-
-def startlock():
- try:
-  r = open("../temp/.runlock-rich","r")
-  r.close()
-  return True
- except:
-  return False
-
-
-
-print("Waiting for discord-headless")
-
-while not startlock():
-   pass
-
-print("Starting")
-os.system("rm  ../temp/.runlock-rich")
 
 pid_c = int(str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)))
 
@@ -58,6 +41,7 @@ urls = url_adapt.adapt( plex_q.get_resources(data["plex_token"], shared.client_i
 url = urls[shared.cid]
 
 while True:  # The presence will stay on as long as the program is running
+    requests.get("http://127.0.0.1:1998/ping")
     music = plex_q.clean_up(plex_q.get_play_latest(data["plex_token"], url))
 #    print("RPC Sent")
 #    print(music[0])
