@@ -12,11 +12,16 @@ def get_play_latest(token, url):
 	except:
 		return []
 	d3 = []
+	plat = ''
 	for i in d2:
 		#print(i.get("Player").get("state"))
 		if i.get("Player").get("state") == "playing":
 			d3.append(i)
-	return d3
+		plat = i.get("Player").get("platform")
+	if d3 == []:
+		return plat
+	else:
+		return d3
 
 def get_resources(token, id):
 	header = {
@@ -27,14 +32,19 @@ def get_resources(token, id):
 	return data
 
 def clean_up(data):
-	if (not data):
-         return None
+	#print(data)
+	if data == []:
+		return '', '', '', '', '', '', ''
+	if (not type(data) is list):
+         return '', '', '', '', '', '', data
 	data = data[0]
+	#print(data)
 	title = data["title"]
 	artist = data["grandparentTitle"]
 	icon = data["thumb"]
 	user = data["User"]["title"]
 	user_icon = data["User"]["thumb"]
 	device_name = data["Player"]["title"]
-	return title, artist, icon, user, user_icon, device_name
+	platform = (data.get("Player").get("platform") or "mobile")
+	return title, artist, icon, user, user_icon, device_name, platform
 

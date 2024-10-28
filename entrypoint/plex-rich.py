@@ -68,7 +68,7 @@ while True:  # The presence will stay on as long as the program is running
     except:
 #       pass
        if tn < 6:
-        if not music[6] in ["Windows", "Mac", "Linux"]:
+        if music[6] == "mobile":
          tn = tn + 1
         else:
          tn = 6
@@ -84,3 +84,4 @@ while True:  # The presence will stay on as long as the program is running
          npc = True
     print(str(tn) + " " + str(last) + " " +str(npc)+" "+str(music))
     time.sleep(5) #Wait a wee bit
+
