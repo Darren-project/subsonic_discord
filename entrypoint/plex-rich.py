@@ -56,10 +56,8 @@ while True:  # The presence will stay on as long as the program is running
        RPC.update(
           large_image=img,
           large_text=music[0],
-          small_image=music[4],
-          small_text=music[3],
           state="Currently playing " + music[0] + " by " + music[1],
-          details="Playing on " + music[5],
+          details="Playing on " + music[3],
           pid=pid_c
        )
        last = music
@@ -68,7 +66,7 @@ while True:  # The presence will stay on as long as the program is running
     except:
 #       pass
        if tn < 6:
-        if music[6] == "mobile":
+        if music[4] == "mobile":
          tn = tn + 1
         else:
          tn = 6
