@@ -12,7 +12,7 @@ import requests
 last = {}
 tn = 0
 npc = False
-
+sd = False
 import logging
 logging.basicConfig(format='%(message)s')
 logging.root.setLevel(logging.NOTSET)
@@ -65,6 +65,18 @@ while True:  # The presence will stay on as long as the program is running
        npc = False
     except:
 #       pass
+       if sd:
+        urls = url_adapt.adapt( plex_q.get_resources(data["plex_token"], shared.client_id))
+        url = urls[shared.cid]
+       if not npc and music[4] == "offline":
+         RPC.update(
+            large_image="plex_icon",
+            state="The server is down!",
+            details="Fix it now!",
+            pid=pid_c
+         )
+         npc = True
+         sd = True
        if tn < 6:
         if music[4] == "3rd-party":
          tn = tn + 1

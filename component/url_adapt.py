@@ -12,5 +12,5 @@ def adapt(inp):
       if relay:
         urir = uri
         trip = True
-    ll[d] = uri
+    ll[d] = urir
    return ll

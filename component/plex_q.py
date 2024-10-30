@@ -5,7 +5,11 @@ def get_play_latest(token, url):
 	header = {
 		"Accept": "application/json"
 	}
-	response = requests.get(url + "/status/sessions?X-Plex-Token=" + token, headers=header)
+
+	try:
+		response = requests.get(url + "/status/sessions?X-Plex-Token=" + token, headers=header)
+	except:
+		return "offline"
 	data = response.json()
 	try:
 		d2 = data["MediaContainer"]["Metadata"]
