@@ -77,7 +77,7 @@ def main():
             time.sleep(2)
             state.set('program_started', True)
             state.set('pid', pid)
-        time.sleep(6)
+        time.sleep(10)
 
 class SharedState():
     def __init__(self):
