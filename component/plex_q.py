@@ -45,6 +45,6 @@ def clean_up(data):
 	user = data["User"]["title"]
 	user_icon = data["User"]["thumb"]
 	device_name = data["Player"]["title"]
-	platform = (data.get("Player").get("platform") or "mobile")
+	platform = (data.get("Player").get("platform") or "3rd-party")
 	return title, artist, icon, device_name, platform
 

@@ -66,7 +66,7 @@ while True:  # The presence will stay on as long as the program is running
     except:
 #       pass
        if tn < 6:
-        if music[4] == "mobile":
+        if music[4] == "3rd-party":
          tn = tn + 1
         else:
          tn = 6
