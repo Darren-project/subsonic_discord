@@ -14,6 +14,7 @@ def get_play_latest(token, url):
 		else:
 			print(str(repr(e)))
 			return "offline"
+	print(response.text)
 	data = response.json()
 	try:
 		d2 = data["MediaContainer"]["Metadata"]
