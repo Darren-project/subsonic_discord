@@ -1,0 +1,1 @@
+cd ../entrypoint && flask --app api run --port 1999

@@ -17,7 +17,9 @@ base = os.getcwd()
 scripts_with_prefixes = [
     {'script': 'arrpc_start.sh', 'prefix': 'arRPC'},
     {'script': 'discord-headless_start.sh', 'prefix': 'Discord Headless'},
-    {'script': 'plex-rich_start.sh', 'prefix': "Plex Rich Presence"}
+    {'script': 'plex-rich_start.sh', 'prefix': "Plex Rich Presence"},
+    {'script': 'api_start.sh', 'prefix': "Dashboard Api"},
+    {'script': 'web_start.sh', 'prefix': "Dashboard Wec"}
 ]
 processes = []
 pids = []
@@ -98,3 +100,4 @@ if __name__ == "__main__":
   else:
     print("Invalid Argument")
     sys.exit(1)
+    

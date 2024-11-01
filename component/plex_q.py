@@ -8,8 +8,12 @@ def get_play_latest(token, url):
 
 	try:
 		response = requests.get(url + "/status/sessions?X-Plex-Token=" + token, headers=header)
-	except:
-		return "offline"
+	except Exception as e:
+		if "SSLError" in str(repr(e)):
+			return "purpose"
+		else:
+			print(str(repr(e)))
+			return "offline"
 	data = response.json()
 	try:
 		d2 = data["MediaContainer"]["Metadata"]
