@@ -39,6 +39,8 @@
 </template>
 
 <script setup>
+import "../assets/main.css"
+
 import { usePresenceStore } from '/src/stores/PresenceStore.ts';
 const PresenceStore = usePresenceStore();
 

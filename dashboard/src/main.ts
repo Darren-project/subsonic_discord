@@ -11,7 +11,7 @@ import {createBootstrap} from 'bootstrap-vue-next'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 import 'fomantic-ui-css/semantic.min.css'
-import './assets/base.css'
+import './assets/main.css'
 
 
 const app = createApp(App)
