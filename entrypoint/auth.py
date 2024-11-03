@@ -1,47 +1,82 @@
+import ngrok
 import sys
 sys.path.insert(0, '..')
-
 from config import shared
-
+import os
+from flask import Flask, request
+import random
 import time
 
-import requests
+code = {}
 
-headers = {
-    'accept': 'application/json',
-    'content-type': 'application/x-www-form-urlencoded',
-}
+app = Flask(__name__)
 
-data = 'strong=true&X-Plex-Product=' + shared.product + '&X-Plex-Client-Identifier=' + shared.client_id
+def end_ok():
+ pass
 
-response = requests.post('https://plex.tv/api/v2/pins', headers=headers, data=data)
+@app.route('/')
+def home():
+    html = '''
+    <script>
+    ( async () => {
+    let cj = await fetch("/api/client_id")
+    let cid = await cj.text()
+    let pr = await fetch("/api/product")
+    let prd = await pr.text()
+    let prs = await fetch('https://plex.tv/api/v2/pins', {
+      method: 'POST',
+      headers: {
+        'Origin': window.location.host,
+        'Accept': 'application/json'
+      },
+      body: new URLSearchParams({
+        'strong': true,
+        'X-Plex-Product': prd,
+        'X-Plex-Client-Identifier': cid
+      })
+    })
+    prs = await prs.json()
+    await fetch('/api/update-code', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(prs)
+    })
+    let urrd = "https://app.plex.tv/auth#" + encodeURI("?clientID=" + cid + "&code=" + prs["code"] + "&context[device][product]=" + prd + "&forwardUrl=https://" + window.location.host + "/authdone")
+    window.location.replace(urrd)
+    })()
+    </script>
+    '''
+    return html
 
-#print(response.json())
+@app.route('/api/client_id')
+def push_client_id():
+   return shared.client_id
 
-code = response.json()["code"]
-pin_id = str(response.json()["id"])
+@app.route('/api/product')
+def push_product():
+    return shared.product
 
-url = "https://app.plex.tv/auth#?clientID=" + shared.client_id + "&code=" + code + "&context[device][product]=" + shared.product.replace(" ", "%20")
+@app.route('/api/update-code', methods=["POST"])
+def update_code():
+   global code
+   code = request.get_json()
+   print("Received code", code)
+   return "code_done"
 
-print(url)
+@app.route('/authdone')
+def authdone():
+   cd = os.system("python3 plex_pin.py " + code["code"] + " " + str(code["id"]))
+   if cd == 0:
+      end_ok()
+      return "Auth done. You may close this page"
+   else:
+      return "Auth failed"
 
-input("enter after you coppied the link")
-
-while True:
-	headers = {
-	    'accept': 'application/json',
-	    'content-type': 'application/x-www-form-urlencoded',
-	}
-
-	data = 'code=' + code + '&X-Plex-Client-Identifier=' + shared.client_id
-
-	response = requests.get('https://plex.tv/api/v2/pins/' + pin_id, headers=headers, data=data)
-	json = response.json()
-	print(json)
-	if json.get("authToken"):
-		print("Saving Token")
-		f = open("../config/plex_token.json", "w")
-		f.write('{"plex_token": "' + json.get("authToken") + '"}')
-		f.close()
-		exit()
-	time.sleep(5)
+if __name__ == '__main__':
+    # Generate a random port between 1024 and 65535
+    port = random.randint(1024, 65535)
+    print("Visit ", ngrok.forward(port, authtoken=shared.ngrok_auth).url(), "to auth")
+    print(f"Running on port {port}")
+    app.run(host='0.0.0.0', port=port)
