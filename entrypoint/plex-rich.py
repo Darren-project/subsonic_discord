@@ -43,7 +43,7 @@ with open('../temp/prevsong.json', 'w') as file:
 
 urls = url_adapt.adapt( plex_q.get_resources(data["plex_token"], shared.client_id))
 url = urls[shared.cid]["relay"]
-api = urls[shared.cid]["direct"]
+api = urls[shared.cid]["relay"]
 
 while True:  # The presence will stay on as long as the program is running
     requests.get("http://127.0.0.1:1998/ping")
@@ -94,7 +94,7 @@ while True:  # The presence will stay on as long as the program is running
        if sd:
         urls = url_adapt.adapt( plex_q.get_resources(data["plex_token"], shared.client_id))
         url = urls[shared.cid]["relay"]
-        api = urls[shared.cid]["direct"]
+        api = urls[shared.cid]["relay"]
        if music[4] == "purpose":
          exit(1)
        if not npc and music[4] == "offline":
@@ -125,4 +125,5 @@ while True:  # The presence will stay on as long as the program is running
          npc = True
     print(str(tn) + " " + str(last) + " " +str(npc)+" "+str(music))
     time.sleep(5) #Wait a wee bit
+
 
