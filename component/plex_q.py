@@ -43,11 +43,11 @@ def get_resources(token, id):
 def clean_up(data):
 	#print(data)
 	if data == []:
-		return '', '', '', '', ''
+		return '', '', '', '', '', 0
 	if (not type(data) is list):
-         return '', '', '', '', data
+         return '', '', '', '', data, 0
 	data = data[0]
-	#print(data)
+	print(data)
 	title = data["title"]
 	artist = data["grandparentTitle"]
 	icon = data["thumb"]
@@ -55,5 +55,6 @@ def clean_up(data):
 	user_icon = data["User"]["thumb"]
 	device_name = data["Player"]["title"]
 	platform = (data.get("Player").get("platform") or "3rd-party")
-	return title, artist, icon, device_name, platform
+	duration = int(data["duration"])
+	return title, artist, icon, device_name, platform, duration
 

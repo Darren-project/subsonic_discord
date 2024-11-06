@@ -48,6 +48,7 @@ api = urls[shared.cid]["relay"]
 while True:  # The presence will stay on as long as the program is running
     requests.get("http://127.0.0.1:1998/ping")
     music = plex_q.clean_up(plex_q.get_play_latest(data["plex_token"], api))
+    epoch_time = int(time.time())
 #    print("RPC Sent")
 #    print(music[0])
     try:
@@ -63,6 +64,8 @@ while True:  # The presence will stay on as long as the program is running
           large_text=music[0],
           state=music[0] + " by " + music[1],
           details="Playing on " + music[3],
+          #start=epoch_time,
+          #end=epoch_time+(music[5]/1000),
           buttons=[{"label": "History", "url": shared.dashboard_url}],
           pid=pid_c,
        )
