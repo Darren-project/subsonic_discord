@@ -2,19 +2,20 @@
     <BContainer fluid class="bv-example-row">
         <BRow>
             <BCol>
+<h1 style="color: white;"> Currently Playing on {{ PresenceStore.devicename.replace("Playing on ",'') }}</h1>
+<div style="display: flex;"> 
     <BCard
   :title="PresenceStore.devicename"
   :img-src="PresenceStore.songimg"
   :img-alt="PresenceStore.songname"
-  style="max-width: 20rem; position: center; background-color: black; color: white;"
+  style="max-width: 70rem; position: center; background-color: black; color: white;"
 >
   <BCardText>
     {{  PresenceStore.songname }}
   </BCardText>
 </BCard>
-</BCol>
-<BCol>
-    <h1 style="font-style: bold; color: white; font-size: 20px;">Previous songs (up to 4)</h1>
+
+    
     <BTable show-empty :items="PresenceStore.play_history" style="" :fields="songs_field" :table-class="'table-dark .th-lg'" responsive>
         <template #cell(songimg)="row">
             <img :alt="row.item.songname" :src="row.value" style="width: 70px; height: 70px;">
@@ -33,6 +34,7 @@
         </template>
         
     </BTable>
+</div>
 </BCol>
 </BRow>
 </BContainer>

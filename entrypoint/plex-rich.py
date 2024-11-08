@@ -37,8 +37,8 @@ from component import plex_q
 with open('../config/plex_token.json', 'r') as file:
     data = json.load(file)
 
-   # Open and wipe the JSON file
-with open('../temp/prevsong.json', 'w') as file:
+if not os.path.exists('../temp/prevsong.json'):
+  with open('../temp/prevsong.json', 'w') as file:
       file.write('[]')
 
 urls = url_adapt.adapt( plex_q.get_resources(data["plex_token"], shared.client_id))
@@ -46,6 +46,7 @@ url = urls[shared.cid]["relay"]
 api = urls[shared.cid]["relay"]
 
 while True:  # The presence will stay on as long as the program is running
+    pid_c = int(str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)))
     requests.get("http://127.0.0.1:1998/ping")
     music = plex_q.clean_up(plex_q.get_play_latest(data["plex_token"], api))
     epoch_time = int(time.time())
