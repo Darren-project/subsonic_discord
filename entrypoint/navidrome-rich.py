@@ -101,7 +101,7 @@ while True:  # The presence will stay on as long as the program is running
           pass
        else:
          RPC.update(
-            large_image="plex_icon",
+            large_image="subsonic_icon",
             state="No music is playing",
             details="Play some music!",
             buttons=[{"label": "History", "url": shared.dashboard_url}],
