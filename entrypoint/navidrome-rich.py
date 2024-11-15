@@ -1,6 +1,5 @@
 import sys
 sys.path.insert(0, '..')
-from component import url_adapt
 from pypresence import Presence
 import time
 import random
@@ -29,26 +28,23 @@ RPC = Presence(client_id)  # Initialize the Presence class
 RPC.connect()  # Start the handshake loop
 
 import json
-from component import plex_q
-
-
-
-# Open and read the JSON file
-with open('../config/plex_token.json', 'r') as file:
-    data = json.load(file)
 
 if not os.path.exists('../temp/prevsong.json'):
   with open('../temp/prevsong.json', 'w') as file:
       file.write('[]')
 
-urls = url_adapt.adapt( plex_q.get_resources(data["plex_token"], shared.client_id))
-url = urls[shared.cid]["relay"]
-api = urls[shared.cid]["relay"]
+username = shared.username
+password = shared.password
+url = shared.url
+socks = "socks5://localhost:2056"
 
 while True:  # The presence will stay on as long as the program is running
     pid_c = int(str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)))
     requests.get("http://127.0.0.1:1998/ping")
-    music = plex_q.clean_up(plex_q.get_play_latest(data["plex_token"], api))
+    data = requests.get("http://" + url + "/rest/getNowPlaying?u=" + username + "&p=" + password + "&v=1.30.1&c=Discord&f=json")
+    data = data.json()
+    music = (data["nowPlaying"]["entry"][0]["title"], data["nowPlaying"]["entry"][0]["artist"], data["nowPlaying"]["entry"][0]["coverArt"], data["nowPlaying"]["entry"][0]["playerName"], data["nowPlaying"]["entry"][0]["playerType"], data["nowPlaying"]["entry"][0]["duration"])
+    
     epoch_time = int(time.time())
 #    print("RPC Sent")
 #    print(music[0])
@@ -56,7 +52,7 @@ while True:  # The presence will stay on as long as the program is running
       if music == last and not npc:
          pass
       else:
-       img = url + music[2] + "?X-Plex-Token=" + data["plex_token"]
+       img = shared.dashboard_url + "/api/art/" + music[2]
 #       print(img)
        if music[0] == "":
         raise "2"
@@ -80,7 +76,7 @@ while True:  # The presence will stay on as long as the program is running
          pass
        else:
          # Append the latest song to the list
-         prev_songs.insert(0, {"songimg": url + last[2] + "?X-Plex-Token=" + data["plex_token"], "songname": last[0], "artistname": last[1], "devicename": last[3]})
+         prev_songs.insert(0, {"songimg": img, "songname": last[0], "artistname": last[1], "devicename": last[3]})
 
       # Ensure the list contains no more than 4 songs
        if len(prev_songs) > 4:
@@ -95,22 +91,7 @@ while True:  # The presence will stay on as long as the program is running
       npc = False
     except:
 #       pass
-       if sd:
-        urls = url_adapt.adapt( plex_q.get_resources(data["plex_token"], shared.client_id))
-        url = urls[shared.cid]["relay"]
-        api = urls[shared.cid]["relay"]
-       if music[4] == "purpose":
-         exit(1)
-       if not npc and music[4] == "offline":
-         RPC.update(
-            large_image="plex_icon",
-            state="The server is down!",
-            details="Fix it now!",
-            buttons=[{"label": "History", "url": shared.dashboard_url}],
-            pid=pid_c,
-         )
-         npc = True
-         sd = True
+      if not npc:
        if tn < 6:
         if music[4] == "3rd-party":
          tn = tn + 1
