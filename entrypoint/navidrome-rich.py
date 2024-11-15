@@ -41,7 +41,7 @@ socks = "socks5://localhost:2056"
 while True:  # The presence will stay on as long as the program is running
     pid_c = int(str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)))
     requests.get("http://127.0.0.1:1998/ping")
-    data = requests.get("http://" + url + "/rest/getNowPlaying?u=" + username + "&p=" + password + "&v=1.30.1&c=Discord&f=json")
+    data = requests.get("http://" + url + "/rest/getNowPlaying?u=" + username + "&p=" + password + "&v=1.30.1&c=Discord&f=json",  proxies=dict(http=socks))
     data = data.json()
     music = (data["nowPlaying"]["entry"][0]["title"], data["nowPlaying"]["entry"][0]["artist"], data["nowPlaying"]["entry"][0]["coverArt"], data["nowPlaying"]["entry"][0]["playerName"], data["nowPlaying"]["entry"][0]["playerType"], data["nowPlaying"]["entry"][0]["duration"])
     
