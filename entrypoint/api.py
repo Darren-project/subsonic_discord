@@ -1,5 +1,6 @@
 import sys
 sys.path.insert(0, '..')
+import requests
 
 from config import shared
 from flask import Flask, jsonify
@@ -20,3 +21,8 @@ def give_prevsong():
         with open('../temp/prevsong.json', 'r') as file:
             prevsong = json.load(file)
         return jsonify(prevsong)
+
+@app.route('/api/art/<string:artid>')
+def give_art(artid):
+    socks = "socks5://localhost:2056"
+    return requests.get(shared.url + "/rest/getCoverArt?id=" + artid + "&u=" + shared.username + "&p=" + shared.password + "&v=1.30.1&c=Discord&f=json", proxies=dict(http=socks)).content
