@@ -17,9 +17,9 @@ base = os.getcwd()
 scripts_with_prefixes = [
     {'script': 'arrpc_start.sh', 'prefix': 'arRPC'},
     {'script': 'discord-headless_start.sh', 'prefix': 'Discord Headless'},
-    {'script': 'plex-rich_start.sh', 'prefix': "Plex Rich Presence"},
+    {'script': 'subsonic-rich_start.sh', 'prefix': "Subsonic Rich Presence"},
     {'script': 'api_start.sh', 'prefix': "Dashboard Api"},
-    {'script': 'web_start.sh', 'prefix': "Dashboard Wec"}
+    {'script': 'web_start.sh', 'prefix': "Dashboard Web"}
 ]
 processes = []
 pids = []

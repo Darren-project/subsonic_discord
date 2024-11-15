@@ -41,7 +41,7 @@ from flask import Flask
 # current module (__name__) as argument.
 app = Flask(__name__)
 
-command = ["python3", "plex-rich.py"]
+command = ["python3", "navidrome-rich.py"]
 
 def webserver(state):
     app.config['STATE'] = state
