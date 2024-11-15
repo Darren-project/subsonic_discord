@@ -1,1 +1,1 @@
-cd ../entrypoint && python3 subsonic-rich-watchdog.py
+cd ../entrypoint && python3 navidrome-rich-watchdog.py
