@@ -94,9 +94,6 @@ while True:  # The presence will stay on as long as the program is running
 #       pass
       if not npc:
        if tn < 6:
-        if music[4] == "3rd-party":
-         tn = tn + 1
-        else:
          tn = 6
        elif npc:
           pass
@@ -108,7 +105,7 @@ while True:  # The presence will stay on as long as the program is running
             pid=pid_c
          )
          npc = True
-    print(str(tn) + " " + str(last) + " " +str(npc)+" "+str(music))
+    #print(str(tn) + " " + str(last) + " " +str(npc)+" "+str(music))
     time.sleep(5) #Wait a wee bit
 
 
