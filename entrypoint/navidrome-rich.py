@@ -9,6 +9,7 @@ import os
 import requests
 
 last = ()
+lastimg = ''
 tn = 0
 npc = False
 sd = False
@@ -50,6 +51,7 @@ while True:  # The presence will stay on as long as the program is running
     try:
       data = data.json()["subsonic-response"]
       music = (data["nowPlaying"]["entry"][0]["title"], data["nowPlaying"]["entry"][0]["artist"], data["nowPlaying"]["entry"][0]["coverArt"], data["nowPlaying"]["entry"][0]["playerName"], "subsonic", data["nowPlaying"]["entry"][0]["duration"])
+      print(music)
       if music == last and not npc:
          pass
       else:
@@ -77,7 +79,7 @@ while True:  # The presence will stay on as long as the program is running
          pass
        else:
          # Append the latest song to the list
-         prev_songs.insert(0, {"songimg": img, "songname": last[0], "artistname": last[1], "devicename": last[3]})
+         prev_songs.insert(0, {"songimg": lastimg, "songname": last[0], "artistname": last[1], "devicename": last[3]})
 
       # Ensure the list contains no more than 4 songs
        if len(prev_songs) > 4:
@@ -88,6 +90,7 @@ while True:  # The presence will stay on as long as the program is running
           file.write(json.dumps(prev_songs))
 
       last = music
+      lastimg = img
       tn = 0
       npc = False
     except:
@@ -99,6 +102,8 @@ while True:  # The presence will stay on as long as the program is running
           pass
        else:
          RPC.update(
+            large_image="subsonic_icon",
+            large_text="No music is playing",
             state="No music is playing",
             details="Play some music!",
             buttons=[{"label": "History", "url": shared.dashboard_url}],
