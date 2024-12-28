@@ -2,17 +2,21 @@ import sys
 sys.path.insert(0, '..')
 from pypresence import Presence
 import time
+from datetime import datetime, timezone
 import random
 from config import shared
 import sys
 import os
 import requests
+import traceback
 
 last = ()
 lastimg = ''
 tn = 0
 npc = False
 sd = False
+laststart = 0
+lastend = 0
 import logging
 logging.basicConfig(format='%(message)s')
 logging.root.setLevel(logging.NOTSET)
@@ -45,27 +49,32 @@ while True:  # The presence will stay on as long as the program is running
     data = requests.get("http://" + url + "/rest/getNowPlaying?u=" + username + "&p=" + password + "&v=1.30.1&c=Discord&f=json",  proxies=dict(http=socks))
 
     
-    epoch_time = int(time.time())
+    #epoch_time = int(time.time())
 #    print("RPC Sent")
 #    print(music[0])
     try:
       data = data.json()["subsonic-response"]
-      music = (data["nowPlaying"]["entry"][0]["title"], data["nowPlaying"]["entry"][0]["artist"], data["nowPlaying"]["entry"][0]["coverArt"], data["nowPlaying"]["entry"][0]["playerName"], "subsonic", data["nowPlaying"]["entry"][0]["duration"])
+      music = (data["nowPlaying"]["entry"][0]["title"], data["nowPlaying"]["entry"][0]["artist"], data["nowPlaying"]["entry"][0]["coverArt"], data["nowPlaying"]["entry"][0]["playerName"], "subsonic", data["nowPlaying"]["entry"][0]["duration"], data["nowPlaying"]["entry"][0]["played"])
       print(music)
-      if music == last and not npc:
+      if music == last and not npc and not lastend > int(datetime.now(timezone.utc).timestamp()):
          pass
       else:
        img = shared.dashboard_url + "/api/art/" + music[2]
 #       print(img)
        if music[0] == "":
         raise "2"
+       dt_object = dt_object = datetime.strptime(music[6], "%Y-%m-%dT%H:%M:%S.%fZ")
+       epoch_time = int(dt_object.replace(tzinfo=timezone.utc).timestamp())
+
+       laststart = epoch_time
+       lastend = epoch_time+music[5]
        RPC.update(
           large_image=img,
           large_text=music[0],
           state=music[0] + " by " + music[1],
           details="Playing on " + music[3],
-          #start=epoch_time,
-          #end=epoch_time+(music[5]/1000),
+          #start=laststart,
+          #end=lastend,
           buttons=[{"label": "History", "url": shared.dashboard_url}],
           pid=pid_c,
        )
@@ -93,7 +102,8 @@ while True:  # The presence will stay on as long as the program is running
       lastimg = img
       tn = 0
       npc = False
-    except:
+    except Exception as e:
+#      logging.error(traceback.format_exc())
 #       pass
       if not npc:
        if tn < 6:
