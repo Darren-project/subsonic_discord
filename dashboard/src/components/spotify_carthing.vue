@@ -1,21 +1,17 @@
 <template>
-    <BContainer fluid style="background: black;" class="bv-example-row">
+    <BContainer fluid class="bv-example-row">
         <BRow>
             <BCol>
-<h1 style="color: white;"> Currently Playing on {{ PresenceStore.devicename.replace("Playing on ",'') }}</h1>
 <div style="display: flex;"> 
-    <BCard
-  :title="PresenceStore.devicename"
-  :img-src="PresenceStore.songimg"
-  :img-alt="PresenceStore.songname"
-  style="max-width: 70rem; position: center; background-color: black; color: white;"
->
-  <BCardText>
-    {{  PresenceStore.songname }}
-  </BCardText>
-</BCard>
-
-    
+    <img :src="PresenceStore.songimg" :alt="PresenceStore.songalt" style="border-radius: 0.5%;" height=430px width=430px>    
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    <div>
+    <h2 style="color: white;">{{ PresenceStore.devicename }}</h2>
+    <h4 style="color: white;">{{ PresenceStore.songname }}</h4>
     <BTable show-empty :items="PresenceStore.play_history" style="" :fields="songs_field" :table-class="'table-dark .th-lg'" responsive>
         <template #cell(songimg)="row">
             <img :alt="row.item.songname" :src="row.value" style="width: 70px; height: 70px;">
@@ -26,14 +22,13 @@
         <template #cell(artistname)="row">
             {{row.value}}
         </template>
-        <template #cell(devicename)="row">
-             {{row.value}}
-        </template>
+       
         <template v-slot:empty>
             <h1 style="font-style: bold; color: white;">No songs played yet!</h1>
         </template>
         
     </BTable>
+    </div>
 </div>
 </BCol>
 </BRow>
@@ -42,7 +37,6 @@
 
 <script setup>
 import "../assets/main.css"
-document.bgColor = "black"
 
 import { usePresenceStore } from '/src/stores/PresenceStore.ts';
 const PresenceStore = usePresenceStore();
@@ -51,11 +45,8 @@ const songs_field = [
     { key: 'songimg', label: 'Cover Art' },
     { key: 'songname', label: 'Song Name' },
     { key: 'artistname', label: 'Artist' },
-    { key: 'devicename', label: 'Device' },
 ]
 
-let play_history = await fetch('/api/prevsong')
-PresenceStore.setHistory(await play_history.json())
 
 let userid = ''
         userid = await fetch('/api/userid')
@@ -133,7 +124,10 @@ webSocket.onmessage = async (event) => {
         PresenceStore.setPresence(songimg, songname, devicename);
         console.log("Presence Updated");
         let quickc = await fetch('/api/prevsong')
-        PresenceStore.setHistory(await quickc.json())
+        let hist = await quickc.json()
+        hist.pop()
+        hist.pop()
+        PresenceStore.setHistory(hist)
         
         } catch (error) {
             console.log(error);

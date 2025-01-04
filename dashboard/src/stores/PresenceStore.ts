@@ -18,6 +18,12 @@ export const usePresenceStore = defineStore('Presence', {
             this.devicename = devicename
         },
         setHistory(history: Object) {
+            for(let item in history) {
+                 let real = history[item]
+                 if (real["artistname"].length > 15) {
+                    real["artistname"] = real["artistname"].substr(0, 15) + " ..."
+                 }
+            }
             this.history = history
         },
         setUID(uid: String) {

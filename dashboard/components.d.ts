@@ -21,5 +21,6 @@ declare module 'vue' {
     Entrypoint: typeof import('./src/components/entrypoint.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Spotify_carthing: typeof import('./src/components/spotify_carthing.vue')['default']
   }
 }

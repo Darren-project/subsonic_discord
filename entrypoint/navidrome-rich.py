@@ -56,18 +56,18 @@ while True:  # The presence will stay on as long as the program is running
       data = data.json()["subsonic-response"]
       music = (data["nowPlaying"]["entry"][0]["title"], data["nowPlaying"]["entry"][0]["artist"], data["nowPlaying"]["entry"][0]["coverArt"], data["nowPlaying"]["entry"][0]["playerName"], "subsonic", data["nowPlaying"]["entry"][0]["duration"], data["nowPlaying"]["entry"][0]["played"])
       print(music)
-      if music == last and not npc and not lastend > int(datetime.now(timezone.utc).timestamp()):
+      if music == last and not npc:
          pass
       else:
        img = shared.dashboard_url + "/api/art/" + music[2]
 #       print(img)
        if music[0] == "":
         raise "2"
-       dt_object = dt_object = datetime.strptime(music[6], "%Y-%m-%dT%H:%M:%S.%fZ")
-       epoch_time = int(dt_object.replace(tzinfo=timezone.utc).timestamp())
+       #dt_object = dt_object = datetime.strptime(music[6], "%Y-%m-%dT%H:%M:%S.%fZ")
+       #epoch_time = int(dt_object.replace(tzinfo=timezone.utc).timestamp())
 
-       laststart = epoch_time
-       lastend = epoch_time+music[5]
+       #laststart = epoch_time
+       #lastend = epoch_time+music[5]
        RPC.update(
           large_image=img,
           large_text=music[0],
