@@ -41,12 +41,12 @@ if not os.path.exists('../temp/prevsong.json'):
 username = shared.username
 password = shared.password
 url = shared.url
-socks = "socks5://localhost:2056"
+#socks = "socks5://localhost:2056"
 
 while True:  # The presence will stay on as long as the program is running
     pid_c = int(str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)))
     requests.get("http://127.0.0.1:1998/ping")
-    data = requests.get("http://" + url + "/rest/getNowPlaying?u=" + username + "&p=" + password + "&v=1.30.1&c=Discord&f=json",  proxies=dict(http=socks))
+    data = requests.get("http://" + url + "/rest/getNowPlaying?u=" + username + "&p=" + password + "&v=1.30.1&c=Discord&f=json")
 
     
     #epoch_time = int(time.time())
@@ -63,18 +63,19 @@ while True:  # The presence will stay on as long as the program is running
 #       print(img)
        if music[0] == "":
         raise "2"
-       #dt_object = dt_object = datetime.strptime(music[6], "%Y-%m-%dT%H:%M:%S.%fZ")
-       #epoch_time = int(dt_object.replace(tzinfo=timezone.utc).timestamp())
+       dt_object = datetime.strptime(music[6], "%Y-%m-%dT%H:%M:%SZ")
+       epoch_time = int(dt_object.replace(tzinfo=timezone.utc).timestamp())
 
-       #laststart = epoch_time
-       #lastend = epoch_time+music[5]
+       laststart = epoch_time
+       lastend = epoch_time+music[5]
        RPC.update(
           large_image=img,
           large_text=music[0],
           state=music[0] + " by " + music[1],
           details="Playing on " + music[3],
-          #start=laststart,
-          #end=lastend,
+#          instance=True,
+#          start=laststart,
+#          end=lastend,
           buttons=[{"label": "History", "url": shared.dashboard_url}],
           pid=pid_c,
        )
@@ -103,7 +104,7 @@ while True:  # The presence will stay on as long as the program is running
       tn = 0
       npc = False
     except Exception as e:
-#      logging.error(traceback.format_exc())
+#,      logging.error(traceback.format_exc())
 #       pass
       if not npc:
        if tn < 6:
@@ -121,6 +122,6 @@ while True:  # The presence will stay on as long as the program is running
          )
          npc = True
     #print(str(tn) + " " + str(last) + " " +str(npc)+" "+str(music))
-    time.sleep(5) #Wait a wee bit
+    time.sleep(10) #Wait a wee bit
 
 
