@@ -27,6 +27,10 @@ chrome_options = Options()
 chrome_options.add_argument("--headless")  # Run Chrome WebDriver in headless mode (without UI)
 chrome_options.binary_location = "../external/ungoogled-chromium_130.0.6723.58-1_linux/chrome"
 chrome_options.add_argument("--proxy-server=" + shared.socks)
+
+#DEBUG ONLY
+chrome_options.add_argument("--remote-debugging-port=9222")
+
 service = Service("../external/ungoogled-chromium_130.0.6723.58-1_linux/chromedriver")
 
 # Start Chrome WebDriver

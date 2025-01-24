@@ -52,10 +52,11 @@ while True:  # The presence will stay on as long as the program is running
     #epoch_time = int(time.time())
 #    print("RPC Sent")
 #    print(music[0])
+    data = data.json()["subsonic-response"]
+    music = ()
     try:
-      data = data.json()["subsonic-response"]
       music = (data["nowPlaying"]["entry"][0]["title"], data["nowPlaying"]["entry"][0]["artist"], data["nowPlaying"]["entry"][0]["coverArt"], data["nowPlaying"]["entry"][0]["playerName"], "subsonic", data["nowPlaying"]["entry"][0]["duration"], data["nowPlaying"]["entry"][0]["played"])
-      print(music)
+      #print(music)
       if music == last and not npc:
          pass
       else:
@@ -121,7 +122,7 @@ while True:  # The presence will stay on as long as the program is running
             pid=pid_c
          )
          npc = True
-    #print(str(tn) + " " + str(last) + " " +str(npc)+" "+str(music))
+    print(str(tn) + " " + str(last) + " " +str(npc)+" "+str(music))
     time.sleep(10) #Wait a wee bit
 
 
