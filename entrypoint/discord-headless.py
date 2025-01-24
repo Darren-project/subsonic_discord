@@ -29,7 +29,7 @@ chrome_options.binary_location = "../external/ungoogled-chromium_130.0.6723.58-1
 chrome_options.add_argument("--proxy-server=" + shared.socks)
 
 #DEBUG ONLY
-chrome_options.add_argument("--remote-debugging-port=9222")
+#chrome_options.add_argument("--remote-debugging-port=9222")
 
 service = Service("../external/ungoogled-chromium_130.0.6723.58-1_linux/chromedriver")
 
