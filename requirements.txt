@@ -1,0 +1,4 @@
+Flask==2.0.1
+pypresence==4.2.1
+requests==2.25.1
+selenium==4.1.0

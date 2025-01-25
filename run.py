@@ -93,8 +93,8 @@ if __name__ == "__main__":
         terminate_processes()
   elif argument == "kill":
     os.system("cd entrypoint/ && python3 emergkill.py")
-  elif argument == "install_chrome":
-   os.system("cd bin && bash chrome_download.sh")
+  elif argument == "install":
+   os.system("cd bin && bash install.sh")
   else:
     print("Invalid Argument")
     sys.exit(1)
