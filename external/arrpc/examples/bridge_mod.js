@@ -34,14 +34,13 @@ ws.onmessage = async x => {
         } catch {
             continue;
         }
-    }
+  }
 
     if (Dispatcher) break;
-}
+  }
 
-   
     const factories = wpRequire.m;
-    
+
 
     for (const id in factories) {
       if (factories[id].toString().includes('APPLICATION_RPC(')) {
@@ -71,11 +70,10 @@ async function lookupAsset(id, d) {
 	const uploadHeaders = new Headers();
 	uploadHeaders.append("Authorization", token);
         uploadHeaders.append("content-type", "application/json");
-	  
-       const isUrl = string => {
-      try { return Boolean(new URL(string)); }
-      catch(e){ return false; }
-  }
+        const isUrl = string => {
+         try { return Boolean(new URL(string)); }
+         catch(e){ return false; }
+        }
         if (isUrl(d)) {
 	     const response_upload = await fetch("https://discord.com/api/v9/applications/" + id + "/external-assets", {
   		headers: uploadHeaders,
@@ -92,11 +90,9 @@ async function lookupAsset(id, d) {
 	const response = await fetch("https://discord.com/api/v9/oauth2/applications/" + id + "/assets?nocache=true", {
   		headers: authHeaders,
 	});
-	
 	data = await response.json()
         let trip = false
         let iid = ''
-	
 	for (let i in data) {
            let real = data[i]
            if (trip) {
@@ -109,7 +105,6 @@ async function lookupAsset(id, d) {
         }
 	return iid
     }
-	
   if (msg.activity?.assets?.large_image) msg.activity.assets.large_image = await lookupAsset(msg.activity.application_id, msg.activity.assets.large_image);
   if (msg.activity?.assets?.small_image) msg.activity.assets.small_image = await lookupAsset(msg.activity.application_id, msg.activity.assets.small_image);
 
