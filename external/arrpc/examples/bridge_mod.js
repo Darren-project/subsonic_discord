@@ -40,28 +40,16 @@ ws.onmessage = async x => {
   }
 
     const factories = wpRequire.m;
-
-
-    for (const id in factories) {
-      if (factories[id].toString().includes('APPLICATION_RPC(')) {
-        const mod = wpRequire(id);
-
-        // fetchApplicationsRPC
-        const _lookupApp = Object.values(mod).find(e => {
-          if (typeof e !== 'function') return;
-          const str = e.toString();
-          return str.includes(',coverImage:') && str.includes('INVALID_ORIGIN');
-        });
-        if (_lookupApp) lookupApp = async appId => {
-          let socket = {};
-          await _lookupApp(socket, appId);
-          return socket.application;
-        };
-      }
-
-      if (lookupApp) break;
-    }
-  }
+async function lookupApp(id) {
+	const authHeaders = new Headers();
+	authHeaders.append("Authorization", token);
+	
+	const response = await fetch("https://discord.com/api/v9/applications/" + id, {
+  		headers: authHeaders,
+	});
+	const data = await response.json()
+	return data
+}
 
 async function lookupAsset(id, d) {
 	const authHeaders = new Headers();
