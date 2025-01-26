@@ -1,109 +1,145 @@
 // NOTE: you may have to run this after onload
 (() => {
-let Dispatcher, lookupAsset, lookupApp, apps = {};
+  let Dispatcher, lookupAsset, lookupApp, apps = {};
 
-function getToken() {
-  	let a = [];
-  	webpackChunkdiscord_app.push([[0],,e=>Object.keys(e.c).find(t=>(t=e(t)?.default?.getToken?.())&&a.push(t))]);
-  	return a[0];
-   }
-
-const token = getToken()
-
-const ws = new WebSocket('ws://127.0.0.1:1997'); // connect to arRPC bridge websocket
-ws.onmessage = async x => {
-  msg = JSON.parse(x.data);
-
-  if (!Dispatcher) {
-    let wpRequire;
-    window.webpackChunkdiscord_app.push([[ Symbol() ], {}, x => wpRequire = x]);
-    window.webpackChunkdiscord_app.pop();
-
-    const modules = wpRequire.c;
-
-    for (const id in modules) {
-    const mod = modules[id].exports;
-
-    for (const prop in mod) {
-        const candidate = mod[prop];
-        try {
-            if (candidate && candidate.register && candidate.wait) {
-                Dispatcher = candidate;
-                break;
-            }
-        } catch {
-            continue;
-        }
+  function getToken() {
+    let token = null;
+    const tokenCandidates = [];
+    webpackChunkdiscord_app.push([
+      [0],
+      {},
+      (e) => Object.keys(e.c).forEach((t) => {
+        const module = e.c[t]?.exports?.default;
+        if (module?.getToken) tokenCandidates.push(module.getToken());
+      })
+    ]);
+    webpackChunkdiscord_app.pop();
+    token = tokenCandidates[0];
+    return token;
   }
 
-    if (Dispatcher) break;
+  const token = getToken();
+
+  if (!token) {
+    console.error('Failed to retrieve token');
+    return;
   }
 
-    const factories = wpRequire.m;
-async function lookupApp(id) {
-	const authHeaders = new Headers();
-	authHeaders.append("Authorization", token);
-	
-	const response = await fetch("https://discord.com/api/v9/applications/" + id, {
-  		headers: authHeaders,
-	});
-	const data = await response.json()
-	return data
-}
+  const ws = new WebSocket('ws://127.0.0.1:1997'); // connect to arRPC bridge websocket
 
-async function lookupAsset(id, d) {
-	const authHeaders = new Headers();
-	authHeaders.append("Authorization", token);
-
-	const uploadHeaders = new Headers();
-	uploadHeaders.append("Authorization", token);
-        uploadHeaders.append("content-type", "application/json");
-        const isUrl = string => {
-         try { return Boolean(new URL(string)); }
-         catch(e){ return false; }
-        }
-        if (isUrl(d)) {
-	     const response_upload = await fetch("https://discord.com/api/v9/applications/" + id + "/external-assets", {
-  		headers: uploadHeaders,
-                method: "POST",
-		body: JSON.stringify({ urls: [d] }),
-	     });
-
-	    data = await response_upload.json()
-            return "mp:" + data[0]["external_asset_path"]
-
-
-        }
-
-	const response = await fetch("https://discord.com/api/v9/oauth2/applications/" + id + "/assets?nocache=true", {
-  		headers: authHeaders,
-	});
-	data = await response.json()
-        let trip = false
-        let iid = ''
-	for (let i in data) {
-           let real = data[i]
-           if (trip) {
-             break
-           }
-           if (real["name"] == d) {
-             trip = true
-             iid = real["id"]
-           }
-        }
-	return iid
+  ws.onmessage = async (event) => {
+    let msg;
+    try {
+      msg = JSON.parse(event.data);
+    } catch (error) {
+      console.error('Failed to parse WebSocket message:', error);
+      return;
     }
-  if (msg.activity?.assets?.large_image) msg.activity.assets.large_image = await lookupAsset(msg.activity.application_id, msg.activity.assets.large_image);
-  if (msg.activity?.assets?.small_image) msg.activity.assets.small_image = await lookupAsset(msg.activity.application_id, msg.activity.assets.small_image);
 
-  if (msg.activity) {
-    const appId = msg.activity.application_id;
-    if (!apps[appId]) apps[appId] = await lookupApp(appId);
+    if (!Dispatcher) {
+      let wpRequire;
+      window.webpackChunkdiscord_app.push([[Symbol()], {}, (x) => (wpRequire = x)]);
+      window.webpackChunkdiscord_app.pop();
 
-    const app = apps[appId];
-    if (!msg.activity.name) msg.activity.name = app.name;
-  }
+      const modules = wpRequire.c;
 
-  Dispatcher.dispatch({ type: 'LOCAL_ACTIVITY_UPDATE', ...msg }); // set RPC status
-};
+      for (const id in modules) {
+        const mod = modules[id]?.exports;
+
+        for (const prop in mod) {
+          const candidate = mod[prop];
+          try {
+            if (candidate && candidate.register && candidate.wait) {
+              Dispatcher = candidate;
+              break;
+            }
+          } catch {
+            continue;
+          }
+        }
+
+        if (Dispatcher) break;
+      }
+    }
+
+    if (!Dispatcher) {
+      console.error('Failed to find Dispatcher');
+      return;
+    }
+
+    async function lookupApp(id) {
+      try {
+        const authHeaders = new Headers({ Authorization: token });
+        const response = await fetch(`https://discord.com/api/v9/applications/${id}`, { headers: authHeaders });
+        return await response.json();
+      } catch (error) {
+        console.error('Failed to fetch app data:', error);
+        return null;
+      }
+    }
+
+    async function lookupAsset(id, descriptor) {
+      try {
+        const authHeaders = new Headers({ Authorization: token });
+        const uploadHeaders = new Headers({
+          Authorization: token,
+          'Content-Type': 'application/json',
+        });
+
+        const isUrl = (string) => {
+          try {
+            new URL(string);
+            return true;
+          } catch {
+            return false;
+          }
+        };
+
+        if (isUrl(descriptor)) {
+          const response = await fetch(`https://discord.com/api/v9/applications/${id}/external-assets`, {
+            method: 'POST',
+            headers: uploadHeaders,
+            body: JSON.stringify({ urls: [descriptor] }),
+          });
+
+          const data = await response.json();
+          return `mp:${data[0]?.external_asset_path}`;
+        }
+
+        const response = await fetch(`https://discord.com/api/v9/oauth2/applications/${id}/assets?nocache=true`, {
+          headers: authHeaders,
+        });
+
+        const data = await response.json();
+        const asset = data.find((item) => item.name === descriptor);
+        return asset?.id || null;
+      } catch (error) {
+        console.error('Failed to fetch asset data:', error);
+        return null;
+      }
+    }
+
+    if (msg.activity) {
+      const { application_id: appId, assets } = msg.activity;
+
+      if (assets?.large_image) {
+        msg.activity.assets.large_image = await lookupAsset(appId, assets.large_image);
+      }
+
+      if (assets?.small_image) {
+        msg.activity.assets.small_image = await lookupAsset(appId, assets.small_image);
+      }
+
+      if (!apps[appId]) {
+        apps[appId] = await lookupApp(appId);
+      }
+
+      const app = apps[appId];
+      if (app && !msg.activity.name) {
+        msg.activity.name = app.name;
+      }
+
+      Dispatcher.dispatch({ type: 'LOCAL_ACTIVITY_UPDATE', ...msg }); // set RPC status
+    }
+  };
 })();
