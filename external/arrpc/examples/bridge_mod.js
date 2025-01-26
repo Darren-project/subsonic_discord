@@ -2,23 +2,13 @@
 (() => {
   let Dispatcher, lookupAsset, lookupApp, apps = {};
 
-  function getToken() {
-    let token = null;
-    const tokenCandidates = [];
-    webpackChunkdiscord_app.push([
-      [0],
-      {},
-      (e) => Object.keys(e.c).forEach((t) => {
-        const module = e.c[t]?.exports?.default;
-        if (module?.getToken) tokenCandidates.push(module.getToken());
-      })
-    ]);
-    webpackChunkdiscord_app.pop();
-    token = tokenCandidates[0];
+  async function getToken() {
+    let resp = fetch("http://localhost:1999/api/dtoken")
+    let token = await resp.text()
     return token;
   }
 
-  const token = getToken();
+  const token = await getToken();
 
   if (!token) {
     console.error('Failed to retrieve token');
