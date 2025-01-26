@@ -1,5 +1,5 @@
 // NOTE: you may have to run this after onload
-(() => {
+(async () => {
   let Dispatcher, lookupAsset, lookupApp, apps = {};
 
   async function getToken() {
