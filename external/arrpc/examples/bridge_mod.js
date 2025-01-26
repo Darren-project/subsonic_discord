@@ -2,14 +2,6 @@
 (async () => {
   let Dispatcher, lookupAsset, lookupApp, apps = {};
 
-  async function getToken() {
-    let resp = fetch("http://localhost:1999/api/dtoken")
-    let token = await resp.text()
-    return token;
-  }
-
-  const token = await getToken();
-
   if (!token) {
     console.error('Failed to retrieve token');
     return;
