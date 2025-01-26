@@ -22,6 +22,10 @@ def give_prevsong():
             prevsong = json.load(file)
         return jsonify(prevsong)
 
+@app.route('/api/dtoken')
+def give_token():
+    return shared.dtoken
+
 @app.route('/api/art/<string:artid>')
 def give_art(artid):
     socks = "socks5://localhost:2056"

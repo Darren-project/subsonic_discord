@@ -122,6 +122,7 @@
       }
 
       Dispatcher.dispatch({ type: 'LOCAL_ACTIVITY_UPDATE', ...msg }); // set RPC status
+      console.log("RPC Dispatched")
     }
   };
 })();
