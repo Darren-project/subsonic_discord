@@ -68,9 +68,12 @@ else:
 
 #exit() #test
 
+#print("(ARRPC) Injecting Token")
+#driver.execute_script("let token = '" + shared.dtoken +"'")
+
 print("(ARRPC) Script injecting")
 script = open('../external/arrpc/examples/bridge_mod.js', "r")
-script = script.read()
+script = script.read().replace("TOKENHERE", shared.dtoken)
 driver.execute_script(script)
 print("(ARRPC) Setup done")
 

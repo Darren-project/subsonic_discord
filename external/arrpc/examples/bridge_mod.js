@@ -1,7 +1,7 @@
 // NOTE: you may have to run this after onload
 (async () => {
   let Dispatcher, lookupAsset, lookupApp, apps = {};
-
+  let token = "TOKENHERE"
   if (!token) {
     console.error('Failed to retrieve token');
     return;
