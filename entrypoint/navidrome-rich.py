@@ -55,7 +55,7 @@ while True:  # The presence will stay on as long as the program is running
     data = data.json()["subsonic-response"]
     music = ()
     try:
-      music = (data["nowPlaying"]["entry"][0]["title"], data["nowPlaying"]["entry"][0]["artist"], data["nowPlaying"]["entry"][0]["coverArt"], data["nowPlaying"]["entry"][0]["playerName"], "subsonic", data["nowPlaying"]["entry"][0]["duration"], data["nowPlaying"]["entry"][0]["played"])
+      music = (data["nowPlaying"]["entry"][0]["title"], data["nowPlaying"]["entry"][0]["artist"], data["nowPlaying"]["entry"][0]["coverArt"], data["nowPlaying"]["entry"][0]["playerName"], "subsonic")
       #print(music)
       if music == last and not npc:
          pass
@@ -64,11 +64,11 @@ while True:  # The presence will stay on as long as the program is running
 #       print(img)
        if music[0] == "":
         raise "2"
-       dt_object = datetime.strptime(music[6], "%Y-%m-%dT%H:%M:%SZ")
-       epoch_time = int(dt_object.replace(tzinfo=timezone.utc).timestamp())
+#       dt_object = datetime.strptime(music[6], "%Y-%m-%dT%H:%M:%SZ")
+#       epoch_time = int(dt_object.replace(tzinfo=timezone.utc).timestamp())
 
-       laststart = epoch_time
-       lastend = epoch_time+music[5]
+#       laststart = epoch_time
+#       lastend = epoch_time+music[5]
        RPC.update(
           large_image=img,
           large_text=music[0],
@@ -105,7 +105,7 @@ while True:  # The presence will stay on as long as the program is running
       tn = 0
       npc = False
     except Exception as e:
-#,      logging.error(traceback.format_exc())
+#      logging.error(traceback.format_exc())
 #       pass
       if not npc:
        if tn < 6:
