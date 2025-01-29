@@ -13,7 +13,7 @@ Edit the file located at config/shared.py and provide the necessary details.
 2. Install Dependencies
 Run the following command to install the required dependencies:
 
-```sh
+```bash
 python run.py install
 ```
 
@@ -28,6 +28,6 @@ Ensure the URL is correctly set in your environment or configuration file.
 5. Start the Application
 Launch the application using the command:
 
-```sh
+```bash
 python run.py start
 ```
