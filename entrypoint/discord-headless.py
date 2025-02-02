@@ -32,15 +32,15 @@ chrome_options.add_argument("--proxy-server=" + shared.socks)
 #chrome_options.add_argument("--remote-debugging-port=9222")
 
 service = Service("../external/ungoogled-chromium_130.0.6723.58-1_linux/chromedriver")
+try:
+  # Start Chrome WebDriver
+  driver = webdriver.Chrome(options=chrome_options, service=service)
 
-# Start Chrome WebDriver
-driver = webdriver.Chrome(options=chrome_options, service=service)
+  # Open Discord login page
+  driver.get("https://discord.com/channels/@me")
 
-# Open Discord login page
-driver.get("https://discord.com/channels/@me")
-
-# Inject token using JavaScript
-script = f"""
+  # Inject token using JavaScript
+  script = f"""
     const token = "{token}";
     setInterval(() => {{
         document.body.appendChild(document.createElement('iframe')).contentWindow.localStorage.token = `"${{token}}"`;
@@ -48,24 +48,25 @@ script = f"""
     setTimeout(() => {{
         location.reload();
     }}, 2500);
-"""
-driver.execute_script(script)
+  """
+  driver.execute_script(script)
 
-print("(Discord Headless) Logging in")
+  print("(Discord Headless) Logging in")
 
-# Wait for the login process to complete
-time.sleep(10)
+  # Wait for the login process to complete
+  time.sleep(10)
 
-print(driver.current_url)
+  print(driver.current_url)
 
-# Verify if login was successful (you can add your own logic here)
-if "discord.com/channels" in driver.current_url:
+  # Verify if login was successful (you can add your own logic here)
+  if "discord.com/channels" in driver.current_url:
     print("(Discord) Login Successful")
-else:
+  else:
     print("(Discord) Login Failed")
     driver.quit()
     exit()
-
+except:
+   os.system(shared.restartc)
 #exit() #test
 
 #print("(ARRPC) Injecting Token")
