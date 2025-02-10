@@ -46,7 +46,7 @@ url = shared.url
 while True:  # The presence will stay on as long as the program is running
     pid_c = int(str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)) + str(random.randint(0,5)))
     requests.get("http://127.0.0.1:1998/ping")
-    data = requests.get("http://" + url + "/rest/getNowPlaying?u=" + username + "&p=" + password + "&v=1.30.1&c=Discord&f=json")
+    data = requests.get(url + "/rest/getNowPlaying?u=" + username + "&p=" + password + "&v=1.30.1&c=Discord&f=json")
 
     
     #epoch_time = int(time.time())
@@ -105,7 +105,7 @@ while True:  # The presence will stay on as long as the program is running
       tn = 0
       npc = False
     except Exception as e:
-#      logging.error(traceback.format_exc())
+      logging.error(traceback.format_exc())
 #       pass
       if not npc:
        if tn < 6:
@@ -121,8 +121,10 @@ while True:  # The presence will stay on as long as the program is running
             buttons=[{"label": "History", "url": shared.dashboard_url}],
             pid=pid_c
          )
+         print("empty")
+         time.sleep(1)
          npc = True
     print(str(tn) + " " + str(last) + " " +str(npc)+" "+str(music))
-    time.sleep(10) #Wait a wee bit
+    time.sleep(4) #Wait a wee bit
 
 

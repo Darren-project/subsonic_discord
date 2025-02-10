@@ -26,7 +26,7 @@ def give_prevsong():
 @app.route('/api/art/<string:artid>')
 def give_art(artid):
     socks = "socks5://localhost:2056"
-    data = requests.get("http://" + shared.url + "/rest/getCoverArt?id=" + artid + "&u=" + shared.username + "&p=" + shared.password + "&v=1.30.1&c=Discord&f=json", proxies=dict(http=socks))
+    data = requests.get(shared.url + "/rest/getCoverArt?id=" + artid + "&u=" + shared.username + "&p=" + shared.password + "&v=1.30.1&c=Discord&f=json", proxies=dict(http=socks))
     content = data.content
     data_type = data.headers['Content-Type']
     return content, 200, {'Content-Type': data_type}
